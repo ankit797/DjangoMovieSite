@@ -1,0 +1,108 @@
+body{
+    background:#2b2b44;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+.nav.navbar-nav li a {
+  color: #fff;
+  font: 400 15px/1.8 Lato, sans-serif;
+}
+
+.navbar-brand{
+    font: 400 15px/1.8 Lato;
+    font-family:'Satisfy' , cursive;
+
+    
+}
+
+.activelink{
+  background:#007bff;
+
+}
+
+.thumbnail{
+      background:#1f1a1a59;
+      color:#5285b3;
+      border-color: #1f1a1a59;
+
+}
+.panel-default{
+      background:#1f1a1a59;
+      color:#5285b3;
+      border-color: #1f1a1a59;
+}
+.text-color{
+  color:red;
+}
+hr{
+  border-color: #656667;
+}
+.panel-footer{
+  background-color: #312d2d;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border-color:#464150;
+}
+
+.footer{
+  background-color: #222;
+  color:#656667;
+  font-weight: bold;
+  width: 100%;
+  margin-top: auto;
+}
+
+
+/* all form attribute properties */
+input{
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+#id_gender,textarea{
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+ ::-webkit-file-upload-button {/* for upload file button */
+    background: #142a7b; /* #313131; check also*/
+    color: #00ff84;
+    border-color:black;
+    padding: .5em;
+}
+
+
+.btn-dark {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #f1f1f1;
+    border-radius: 0;
+    transition: .2s;
+    border-color: #333;
+  }
+.btn-dark:hover, .btn-dark:focus {
+    border: 1px solid #333;
+    background-color: #fff;
+    color: #000;
+}
+
+
+.modal-header {
+    background-color: #333;
+    color: #fff !important;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-header, .modal-body {
+    padding: 40px 50px;
+}

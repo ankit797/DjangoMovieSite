@@ -1,0 +1,185 @@
+{% extends 'movie/base.html' %}
+{% block title %}Movie Detail{% endblock %}
+
+{% block add %}
+    <li class="">
+        <a href="{% url 'movie:song-add' movie.id%}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Song
+        </a>
+    </li>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <!-- Left Movie Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'movie:detail' movie.id %}">
+                        {% if movie.movie_logo %}
+                            <img src="{{ movie.movie_logo.url }}" class="img-responsive">
+                        {% else %}
+                            <h3>No image to display</h3>
+                        {% endif %}
+                    </a>
+                    <h1 class="text-color">{{ movie.movie_name }} <small class="text-color">{{ movie.movie_year }}</small></h1>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Song Info -->
+        <div class="col-sm-7 col-md-9">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'movie:detail' movie.id %}">View All</a></li>
+                <li role="presentation"><a href="{% url 'movie:song-add' movie.id%}">Add New Song</a></li>
+
+                <div class="pull-right">
+                    {% if Error %}
+                        <p style="color:red;" class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{Error}} &nbsp;
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button></p>
+                    {% endif %}
+
+                    {% if movie.song_set.all %} <!-- if songs exist then block runs otherwise not run -->
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#delete_all_movie">Delete All Songs</button>        
+                    <div class="modal fade" id="delete_all_movie" role="dialog">
+                        <div class="modal-dialog">
+                        
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+                              <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span>For Delete All Songs</h4>
+                            </div>
+                            <div class="modal-body">
+
+                              <form role="form" action="{% url 'movie:song-all-delete' movie.id %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                  <label for="id_password"><span class="glyphicon glyphicon-user"></span> Password:</label>
+                                  <input type="password" maxlength="30" name="password" class="form-control" id="id_password" placeholder="Password">
+                                </div>
+                                
+                                  <button type="submit" class="btn-dark btn-block">Varify Your Account
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                  </button>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove"></span> Cancel
+                              </button>
+                              <p>Need <a href="#">help?</a></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+
+                </div>
+                
+                
+            </ul>
+
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3 class="text-color">All Songs</h3>
+
+                    {% if error_message %}
+                        <p style="color:red;"class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{ error_message }}</p>
+                    {% endif %}
+
+                    <table class="table table-borderless" >
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Audio File</th>
+                            <th>Favorite</th>
+                            <th>Song Update</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for song in movie.song_set.all %}
+                            <tr>
+                                <td>{{ song.song_name }}</td>
+                                <td>
+                                    <a target="_blank" href="{{ song.song_audio.url }}">
+                                        <button type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-play"></span>&nbsp; Play
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'movie:favorite' song.id %}" class="btn-favorite"><span class="{% if song.is_favorite %}glyphicon glyphicon-star {% else %}glyphicon glyphicon-star-empty {% endif %}"></span></a>
+                                </td>
+
+                                <!-- Update Song -->
+                                <td>
+                                <a href="{% url 'movie:song-update' song.movie.id song.id %}" class="btn-update" role="button"><span class="glyphicon glyphicon-pencil"></span></a>
+                                </td>
+
+
+                                <!-- Delete Song -->
+                                <td>
+
+                                    <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_song_model{{song.movie.id}}{{song.id}}">
+                                        <span class="glyphicon glyphicon-remove"></span> Delete
+                                    </button>
+          
+                                      <!--   Modal -->
+                                    <div class="modal fade" id="delete_song_model{{song.movie.id}}{{song.id}}" role="dialog">
+                                        <div class="modal-dialog">
+                                        
+                                          <!--  Modal content -->
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+                                            <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span> Are Your Sure You Want To Delete This Song?</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                              if Sure then select Yes otherwise select No 
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                                                <span class="glyphicon glyphicon-remove"></span> No
+                                              </button>
+                                                <form action="{% url 'movie:song-delete' song.movie.id song.id %}" method="post" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                                    
+                                                    <button type="submit" class="btn-dark pull-Right">
+                                                        <span class="glyphicon glyphicon-ok"></span> Yes
+                                                    </button>
+                                                </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'movie/base.html' %}
+{% load static %}
+{% block title %}Movies List{% endblock %}
+
+
+{% block movie_active %}activelink{% endblock %}
+
+{% block body %}
+
+<!-- this block is only for delete all movies -->
+{% if movies %}
+<div class="container-fluid">
+    <div class="pull-right">
+        {% if Error %}
+            <p style="color:red;"class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{Error}} &nbsp;
+            <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button></p>
+        {% endif %}
+
+
+        <button class="btn btn-danger" data-toggle="modal" data-target="#delete_all_movie">Delete All Movies</button>        
+        <div class="modal fade" id="delete_all_movie" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+              <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span> For Delete All Movie</h4>
+            </div>
+            <div class="modal-body">
+
+              <form role="form" action="{% url 'movie:movie-all-delete' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="id_password"><span class="glyphicon glyphicon-user"></span> Password:</label>
+                  <input type="password" maxlength="30" name="password" class="form-control" id="id_password" placeholder="Password">
+                </div>
+                
+                  <button type="submit" class="btn-dark btn-block">Varify Your Account
+                    <span class="glyphicon glyphicon-ok"></span>
+                  </button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
+              </button>
+              <p>Need <a href="#">help?</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+</div>
+{% endif %}
+
+
+
+<div class="albums-container container-fluid">
+
+    <!-- Movies -->
+    <div class="row">
+
+        {% if movies %}
+            {% for movie in movies %}
+
+                <div class="col-sm-4 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{% url 'movie:detail' movie.id %}">
+                            <img src="{{ movie.movie_logo.url }}" class="img-rounded" >
+                        </a>
+                        <div class="caption">
+                            <h4 class="text-color">{{ movie.movie_name }} ({{ movie.movie_year }})</h4>
+                            
+
+                            <!-- View Details -->
+                            <a href="{% url 'movie:detail' movie.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+
+                            <!-- Update Movie -->
+                            <a href="{% url 'movie:movie-update' movie.id%}" class="btn btn-default btn-sm" role="button"><span class="glyphicon glyphicon-pencil"></span></a>
+
+
+
+                            <!-- Delete Movie -->
+                            <button class="btn btn-default" data-toggle="modal" data-target="#delete_movie_model{{movie.id}}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+  
+                              <!--   Modal -->
+                              <div class="modal fade" id="delete_movie_model{{movie.id}}" role="dialog">
+                                <div class="modal-dialog">
+                                
+                                  <!--  Modal content -->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+                                    <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span> Are Your Sure You Want To Delete This Movie?</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      if Sure then select Yes otherwise select NO 
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-remove"></span> No
+                                      </button>
+
+                                      <form action="{% url 'movie:movie-delete' movie.id%}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                            <input type="hidden" name="movie_id" value="{{ movie.id }}" />
+                                            
+                                            <button type="submit" class="btn-dark pull-Right">
+                                                <span class="glyphicon glyphicon-ok"></span> Yes
+                                            </button>
+                                        </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            
+
+
+                            <!-- Favorite Movie -->
+                            <a href="{% url 'movie:favorite_movie' movie.id %}" class="btn btn-default btn-sm btn-favorite">
+                                <span class="{% if movie.is_favorite %}glyphicon glyphicon-star {% else %}glyphicon glyphicon-star-empty {% endif %}"></span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-12">
+                <br>
+                <a href="{% url 'movie:movie-add' %}">
+                    <button type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Movie
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    
+
+
+
+</div>
+{% endblock %}

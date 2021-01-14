@@ -1,0 +1,155 @@
+{% extends 'movie/base.html' %}
+{% block title %}Video{% endblock %}
+{% block video_active %}activelink{% endblock %}
+
+{% block add %}
+    <li class="">
+        <a href="{% url 'movie:add_video' %}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Video
+        </a>
+    </li>
+{% endblock %}
+
+{% block body %}
+
+{% if all_videos %}
+<div class="container-fluid">
+    <div class="pull-right">
+        {% if Error %}
+            <p style="color:red;"class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{Error}}&nbsp;
+            <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button></p>
+        {% endif %}
+
+        <button class="btn btn-danger" data-toggle="modal" data-target="#delete_all_movie">Delete All Videos</button>        
+        <div class="modal fade" id="delete_all_movie" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+              <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span> For Delete All Videos</h4>
+            </div>
+            <div class="modal-body">
+
+              <form role="form" action="{% url 'movie:video-all-delete' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="id_password"><span class="glyphicon glyphicon-user"></span> Password:</label>
+                  <input type="password" maxlength="30" name="password" class="form-control" id="id_password" placeholder="Password">
+                </div>
+                
+                  <button type="submit" class="btn-dark btn-block">Varify Your Account
+                    <span class="glyphicon glyphicon-ok"></span>
+                  </button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
+              </button>
+              <p>Need <a href="#">help?</a></p>
+            </div>
+          </div>
+        </div>
+        </div>
+
+
+    </div>
+</div>
+{% endif %}
+
+<div class="albums-container container-fluid">
+
+    <!-- Albums -->
+    <div class="row">
+
+        {% if all_videos %}
+            {% for video in all_videos %}
+
+
+                <div class="col-sm-4 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{{video.video_song.url }}">
+                            <img src="{{ video.video_logo.url }}" class="img-rounded">
+                        </a>
+                        <div class="caption">
+                            <h4 class="text-color">{{ video.video_name }}</h4>
+
+                            <!-- View Details -->
+                            <a href="{% url 'movie:videopage' video.id %}" class="btn btn-primary btn-sm" role="button">Details</a>
+
+                            <!-- for play video -->
+                            <a target="_blank" href="{{video.video_song.url }}" class="btn btn-primary btn-sm" role="button">
+                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>&nbsp; Play
+                            </a> 
+
+                            <!-- Update Video -->
+                            <a href="{% url 'movie:update_video' video.id%}" class="btn btn-default btn-sm" role="button"><span class="glyphicon glyphicon-pencil"></span></a>
+
+                            
+
+
+
+                            <!-- Delete Video-->
+
+                            <button class="btn btn-default" data-toggle="modal" data-target="#delete_video_model{{video.id}}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+  
+                              <!--   Modal -->
+                              <div class="modal fade" id="delete_video_model{{video.id}}" role="dialog">
+                                <div class="modal-dialog">
+                                
+                                  <!--  Modal content -->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" style="color: #fff;font-size: 30px;">×</button>
+                                    <h4 style="font-size: 30px;"><span class="glyphicon glyphicon-lock"></span> Are Your Sure You Want To Delete This Video?</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      if Sure then select Yes otherwise select No 
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn-dark pull-left" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-remove"></span> No
+                                      </button>
+
+                                      <form action="{% url 'movie:delete_video' video.id  %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                            <input type="hidden" name="video_id" value="{{ video.id }}" />
+                                            
+                                            <button type="submit" class="btn-dark pull-Right">
+                                                <span class="glyphicon glyphicon-ok"></span> Yes
+                                            </button>
+                                        </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                            
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-12">
+                <br>
+                <a href="{% url 'movie:add_video' %}">
+                    <button type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Video
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+</div>
+{% endblock %}

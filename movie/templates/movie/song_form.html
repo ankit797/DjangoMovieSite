@@ -1,0 +1,28 @@
+{% extends 'movie/base.html' %}
+{% block title %}Update Song{% endblock %}
+
+
+{% block body %}
+    <div class = "container-fluid">
+        <div class="col-lg-6 col-lg-offset-3 ">
+            <div class="panel panel-default">
+                <div class="panel-body">
+		            <h1 class="text-color"> Update Song </h1><hr>
+                    {% if error_message %}
+                        <p style="color:red;"class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{error_message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button></p>
+                    {% endif %}
+
+                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'movie/form_template.html' %}
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success">Update Song</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!--this is only for mobile view navbar -->
+    
+    <title>{% block title %}Ankit Maurya{% endblock %}</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'movie/images/home512.png' %}" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Satisfy'>
+
+    <link id="theme" rel="stylesheet" type="text/css" href="{% static 'movie/light-theme.css' %}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'movie/js/main.js' %}"></script>
+
+    <script type="text/javascript"> // only for light mode to dark mode or dark mode to light mode
+        // this one is just to wait for the page to load
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const themeStylesheet = document.getElementById('theme'); //for store theme
+            const image = document.getElementById("myImg") // for store image all steps which belongs image or stored image
+            const storedTheme = localStorage.getItem('theme');
+            const storedImage = localStorage.getItem("myImg");
+
+            if(storedTheme){
+                themeStylesheet.href = storedTheme;
+            }
+            if(storedImage){
+                image.src = storedImage;
+            }
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                // if it's light -> go dark
+                if(themeStylesheet.href.includes('light')){
+                    themeStylesheet.href = '{% static "movie/dark-theme.css" %}';
+                    //themeToggle.innerText = 'Switch to light mode'; for replace text over text
+                    image.src = "{% static 'movie/images/light.png' %}";
+                } else {
+                    // if it's dark -> go light
+                    themeStylesheet.href = '{% static "movie/light-theme.css" %}';
+                    // themeToggle.innerText = 'Switch to dark mode';
+                    image.src = "{% static 'movie/images/dark1.png' %}";
+                }
+                // save the preference to localStorage
+                localStorage.setItem('theme',themeStylesheet.href)
+                localStorage.setItem("myImg",image.src)
+            })
+        })
+    </script>
+
+
+</head>
+<body>
+
+<div id="main-wrapper" style="min-height: 868px;">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+
+    <nav class="navbar navbar-inverse" role="navigation" >
+    <div class="container-field">
+        <!-- Header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+            </button>
+            <a class="navbar-brand {% block home_active %}{% endblock %}" href="{% url 'movie:home_page' %}" style="color: white;"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true" ></span>&nbsp; Home Page</a>
+        </div>
+
+        <!-- Items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav" >
+
+                <li class="{% block movie_active %}{% endblock %}" >
+                    <a href="{% url 'movie:index' %}">
+                        <span class="glyphicon glyphicon-film" aria-hidden="true"></span>&nbsp; Movie
+                        <span class="badge" style="background-color: red;">new</span>
+                    </a>
+                </li>
+
+                <li class="{% block songs_active %}{% endblock %}">
+                    <a href="{% url 'movie:song-list' 'all' %}">
+                        <span class="glyphicon glyphicon-music" aria-hidden="true"></span>&nbsp; Songs
+                    </a>
+                </li>
+                <li class="{% block video_active %}{% endblock %}">
+                    <a href="{% url 'movie:video' %}">
+                        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>&nbsp; Video
+                    </a>
+                </li>
+		    {% csrf_token %}
+                    {% if user.is_authenticated %} <!-- if user logged in then -->
+
+                    <li class="{% block Change_Password_active %}{% endblock %}">
+                        <a  href="{% url 'movie:change_password' %}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp; Change Password
+                        </a>
+                    </li>
+		    {% endif %}
+
+
+            </ul>
+
+            <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'movie:search' %}">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="q" value="" placeholder="Search" style="background-color: black;border-color: black;color: white;">
+                </div>
+                <button type="submit" class="search btn btn-default" style="background-color: black;border-color: black;">
+                    <style type="text/css">
+                        .search{ 
+                            color: white;
+                        }
+                        .search:hover{
+                            color:red;
+                        }
+                        
+                    </style>
+                     <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </form>
+
+
+
+            <ul class="nav navbar-nav navbar-right ml-auto">
+                {% block add %}
+                <li class="{% block addmovie_active %}{% endblock %}">
+                    <a href="{% url 'movie:movie-add' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Movie
+                    </a>
+                </li>
+                {% endblock %}
+
+
+
+                    {% csrf_token %}
+                {% if user.is_authenticated %} <!-- if user logged in then -->
+                    <li class="{% block profile_active %}{% endblock %}">
+                        <a  href = "{% url 'movie:profile' user.id %}" >
+                            {% if user.userprofile.profile_photo %}
+                            <img class="img-circle" src="{{ user.userprofile.profile_photo.url }}" height="23" width="23">
+                            {% endif %}
+                            Hello, {{user.username}}
+                        </a>
+
+                    </li>
+                    <li class="{% block update_user_active %}{% endblock %}">
+                        <a href="{% url 'movie:update_user' %}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Update User
+                        </a>
+                    </li>
+		            <li class="{% block logout_active %}{% endblock %}">
+                        <a href="{% url 'movie:logout' %}">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+                        </a>
+                    </li>
+                {% else %}
+                <li class="{% block login_active %}{% endblock %}">
+                    <a href="{% url 'movie:login' %}">
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login
+                    </a>
+                </li>
+                <li class="{% block signup_active %}{% endblock %}">
+                    <a href="{% url 'movie:signup' %}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Signup
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+                <li>
+                    <a id="theme-toggle" href="#" title="Dark Mode">
+                        <img id="myImg" src="{% static 'movie/images/dark1.png' %}" width="24" height="24">
+                    </a>
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+{% block body %}
+{% endblock %}
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <hr>
+        <span class="pull-right"> Copyright © 2020 Ankit Maurya</span>
+    </div><br>
+</footer>
+
+
+<!-- for add scroll_top.html file (scroll up) -->
+    <div>
+        <a id="mybtn" style="display: none;">
+                <span style="color: black;" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                <style>
+                    #mybtn
+                        {
+                        position: fixed;
+                        display: none;
+                        bottom: 30px;
+                        right: 40px;
+                        z-index: 99;
+                        border:none;
+                        outline: one;
+                        background-color: #00a8ff;
+                        color: white;
+                        cursor: pointer;
+                        padding: 10px;
+                        border-radius: 10px;
+
+                    }
+                   #mybtn:hover
+                    {
+                        background-color: #606060;
+                    }
+
+                </style>
+                <script type="text/javascript">
+                    var btn;
+                    btn=document.querySelector("#mybtn");
+                    window.onscroll=function(){scrollFunction()};
+                    function scrollFunction()
+                    {
+
+                        if(document.body.scrollTop > 100 ||document.documentElement.scrollTop >100)
+                            {
+                                btn.style.display="block";
+                            }
+                        else
+                            {
+                                btn.style.display="none";
+
+                            }
+                    }
+                    btn.addEventListener("click",function()
+                    {
+
+                        document.body.scrollTop=0;//safari
+                        document.documentElement.scrollTop=0;// for chrome,opera ,firefox and IE
+                    });
+                </script>
+
+        </a>
+    </div>
+
+
+
+</body>
+</html>

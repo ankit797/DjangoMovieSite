@@ -1,0 +1,62 @@
+{% extends 'movie/base.html' %}
+{% block title %}Update User{% endblock %}
+{% block update_user_active %}activelink{% endblock %}
+
+{% block body %}
+    <div class = "container-fluid" >
+        <div class="col-lg-6 col-lg-offset-3 " >
+            <div class="panel panel-default">
+                <div class="panel-body">
+		            <h1 class="text-color"> Update User</h1><hr/>
+
+                    {% if error_message %}
+                        <p style="color:red;" class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;{{error_message}}</p>
+                    {% endif %}
+                    {% if Error %}
+                        <p style="color:red;" class="alert alert-danger alert-dismissible"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; {{Error}}
+
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button></p>
+                    {% endif %}
+
+                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+					    {% include 'movie/form_template.html' %}
+
+					    
+					    {% for field in profile_form %}
+                            <div class="form-group" >
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <span class="text-danger small">{{field.errors}}</span>
+                                </div>
+                                <label class="control-label col-sm-2">
+                                    {{field.label_tag}}
+                                </label>
+                                <div class="col-sm-10">{{field}}</div>
+                            </div>
+                        {% endfor %}
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="id_password">
+                                Password:
+                            </label>
+                            <div class="col-sm-10">
+                                <input id="id_password" maxlength="30" name="password" type="password" placeholder="Password for varify account">
+                            </div>
+                        </div>
+
+                        
+					    
+					    <div class="col-sm-offset-2 col-sm-10">
+	                      	<button type="submit" class="btn btn-success">Update Profile</button>
+	                    </div>
+					</form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

@@ -1,0 +1,75 @@
+    
+body{
+    background:white url("images/center1.jpg");
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+
+}
+.navbar{
+  background-color: #286090;
+}
+.nav.navbar-nav li a {
+  color: #fff;
+  font: 400 15px/1.8 Lato, sans-serif;
+}
+
+.navbar-brand{
+    font-family:'Satisfy' , cursive;
+    font: 400 15px/1.8 Lato;
+    
+}
+.activelink{
+  background:#0c4c6b;
+
+}
+.text-color{
+  color:black;
+}
+
+.thumbnail{
+      background-image: url("images/background.png");
+
+}
+.panel-body{
+      background-image: url("images/background.png");
+
+}
+
+
+hr{
+  border-color: #656667;
+}
+
+.footer{
+  background-color: #286090;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  margin-top: auto;
+
+}
+
+.btn-dark {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #f1f1f1;
+    border-radius: 0;
+    transition: .2s;
+    border-color: #333;
+  }
+.btn-dark:hover, .btn-dark:focus {
+    border: 1px solid #333;
+    background-color: #fff;
+    color: #000;
+}
+
+.modal-header{
+    background-color: #333;
+    color: #fff !important;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-header, .modal-body {
+    padding: 40px 50px;
+}

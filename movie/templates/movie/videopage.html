@@ -1,0 +1,22 @@
+{% extends 'movie/base.html' %}
+{% block title %}video Detail Page{% endblock %}
+
+{% block body %}
+<div class = "container-fluid">
+<div class="thumbnail">
+<div class="col-sm-4 col-md-4 text-center" style="color:#28a745;">
+	
+		<h1 class="text-color"><strong>Video Details</strong></h1><hr>
+		<h2><strong style="color:#007bff;">Title:-</strong> {{video.video_name}}</h2>
+		<h2> <img src = "{{video.video_logo.url}}" height="300" width="500"></h2>
+		<h2><strong style="color:#007bff;">Genre:-</strong> {{video.genre}}</h2>
+		<h2><strong style="color:#007bff;">Release year:-</strong> {{video.release_year}}</h2>
+
+</div>
+
+<div class="">
+	<embed width="1230" height="740" id="idIframe" src="{{video.video_song.url}}" type="video/mp4">
+</div>
+</div>
+</div>
+{% endblock %}

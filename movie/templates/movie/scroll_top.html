@@ -1,0 +1,56 @@
+{% block scroll_top %}{% endblock %}
+<!-- for add scroll_top.html file (scroll up) -->
+	<div>
+        <a id="mybtn" style="display: none;">
+                <span style="color: black;" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                <style>
+                    #mybtn
+                        {
+                        position: fixed;
+                        display: none;
+                        bottom: 30px;
+                        right: 40px;
+                        z-index: 99;
+                        border:none;
+                        outline: one;
+                        background-color: #00a8ff;
+                        color: white;
+                        cursor: pointer;
+                        padding: 10px;
+                        border-radius: 10px;
+
+                    }
+                   #mybtn:hover
+                    {
+                        background-color: #606060;
+                    }
+
+                </style>
+                <script type="text/javascript">
+                    var btn;
+                    btn=document.querySelector("#mybtn");
+                    window.onscroll=function(){scrollFunction()};
+                    function scrollFunction()
+                    {
+
+                        if(document.body.scrollTop > 100 ||document.documentElement.scrollTop >100)
+                            {
+                                btn.style.display="block";
+                            }
+                        else
+                            {
+                                btn.style.display="none";
+
+                            }
+                    }
+                    btn.addEventListener("click",function()
+                    {
+
+                        document.body.scrollTop=0;//safari
+                        document.documentElement.scrollTop=0;// for chrome,opera ,firefox and IE
+                    });
+                </script>
+
+        </a>
+    </div>
+
